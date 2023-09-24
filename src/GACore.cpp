@@ -8,23 +8,23 @@ GACore::GACore(const CoreSettings &core_settings): core_settings_(core_settings)
 
 }
 
-void GACore::initialize(const bool initialie_values=false)
+void GACore::initialize(const bool initialie_values)
 {
     std::vector<Genome> genomes(core_settings_.population_size);
     for(int i=0; i<core_settings_.population_size; )
     {
         Genome genome(core_settings_.num_genoms_value, initialie_values);
-        if(!initialie_values && initial_genoms_value_.size == core_settings_.num_genoms_value)
+        if(!initialie_values && initial_genoms_value_.size() == core_settings_.num_genoms_value)
         {
             genome.setValues(initial_genoms_value_);
         }
         else
         {
             //TODO: throw an exception
-            std::cout << "[GACore] since the genoms values have not been initialized with defauls values it is neccessary
-                                   to set the initial values" << std::endl;
+            std::cout << "[GACore] since the genoms values have not been initialized with defauls values it is neccessary" 
+                      <<           "to set the initial values" << std::endl;
         }
-        genomes_.at(i) = genome;
+        genomes.at(i) = genome;
     }
     population_.setPopulation(genomes);
 }
@@ -36,7 +36,7 @@ void GACore::run()
           population_.increaseGenerationNumber()
         )
     {
-        for(Genome genome : population_)
+        for(Genome genome : population_.getPopulation())
         {
             double fitness = evaluateCostFunction(genome.getValues());
             genome.setFitness(fitness);

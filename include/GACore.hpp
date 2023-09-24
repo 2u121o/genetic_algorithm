@@ -14,8 +14,8 @@ class GACore
 {
     public:
         GACore(const CoreSettings &core_settings);
-
-        void initialize();
+        
+        void initialize(const bool initialie_values=false);
         void run();
 
     private:
@@ -23,7 +23,7 @@ class GACore
         Population population_;
 
     protected:
-        std::vector initial_genoms_value_;
+        std::vector<double> initial_genoms_value_;
 
         virtual double evaluateCostFunction(const std::vector<double> &values) = 0;
 

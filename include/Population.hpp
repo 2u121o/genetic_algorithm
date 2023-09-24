@@ -1,8 +1,9 @@
 #ifndef POPULATION_HPP
 #define POPULATION_HPP
 
-#include <iostram>
+#include <iostream>
 #include <vector>
+#include <algorithm>
 
 #include "Genome.hpp"
 
@@ -14,7 +15,7 @@ class Population
     public:
         Population();
         Population(std::vector<Genome> &genomes);
-        Population(const int population_size);
+        Population(const int population_size, const int num_values);
 
         void createNextGeneration();
         void sort();
@@ -25,7 +26,7 @@ class Population
         int getGenerationNum() const;
         void increaseGenerationNumber();
 
-        Genome& getBestGenome() const;
+        Genome& getBestGenome() ;
 
     private:
         std::vector<Genome> genomes_;

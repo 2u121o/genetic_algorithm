@@ -5,14 +5,13 @@
 #include <vector>
 #include <random>
 
-#include <Eigen/Dense>
-
 namespace genetic_algorithm
 {
 
 class Genome
 {
     public:
+        Genome();
         Genome(const int num_values, const bool initialie_values=false);
 
         void setFitness(const double fitness);
@@ -24,9 +23,16 @@ class Genome
         void setValues(const std::vector<double> values);
         const std::vector<double>& getValues() const;
 
-        Genome operator*(const Genome& genome) const;
+        int getNumValues() const;
+
+        int getAge() const;
+
+        double* at(const int index);
+
+        Genome operator*(const Genome& genome);
         bool operator<(const Genome& genome) const;
         bool operator>(const Genome& genome) const;
+        Genome& operator=(const Genome& genome);
 
         friend std::ostream& operator<<(std::ostream& output, const Genome genome);
 

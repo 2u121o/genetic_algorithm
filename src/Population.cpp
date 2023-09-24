@@ -1,4 +1,4 @@
-#include "Pupulation.hpp"
+#include "Population.hpp"
 
 namespace genetic_algorithm
 {
@@ -26,7 +26,7 @@ Population::Population(const int population_size, const int num_values): generat
 
 void Population::sort()
 {
-    std::sort(genomes_.begin(), genomes_.end(), std::greater<Genome>())
+    std::sort(genomes_.begin(), genomes_.end(), std::greater<Genome>());
 }
 
 void Population::createNextGeneration()
@@ -36,7 +36,7 @@ void Population::createNextGeneration()
         sort();
     }
     std::vector<Genome> next_genomes = genomes_;
-    int pupulation_size = static_cast<int>(genomes.size());
+    int pupulation_size = static_cast<int>(genomes_.size());
     for(int i=0; i<pupulation_size/2; i++)
     {
         Genome genome_a = genomes_.at(i); 
@@ -67,7 +67,7 @@ void Population::increaseGenerationNumber()
     generation_num_++;
 }
 
-Genome& Population::getBestGenome() const
+Genome& Population::getBestGenome()
 {
     return genomes_.at(0);
 }

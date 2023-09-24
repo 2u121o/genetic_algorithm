@@ -3,19 +3,27 @@
 namespace genetic_algorithm
 {
 
-Genome::Genome(const int num_values, const bool initialie_values=true): age_(0), 
-                                                                        fitness_(0), 
-                                                                        num_values_(num_values),
-                                                                        uniform_int_distribution_(0,1),
-                                                                        uniform_real_distribution_(0.0,1.0)
-                                    {
+Genome::Genome(): age_(0),
+                  fitness_(0),
+                  uniform_int_distribution_(0,1),
+                  uniform_real_distribution_(0.0,1.0)
+{
+
+}
+
+Genome::Genome(const int num_values, const bool initialie_values): age_(0), 
+                                                                   fitness_(0), 
+                                                                   num_values_(num_values),
+                                                                   uniform_int_distribution_(0,1),
+                                                                   uniform_real_distribution_(0.0,1.0)
+{
     initialize(initialie_values);
 }
 
 void Genome::initialize(const bool initialie_values)
 {
     std::random_device random_device;
-    generator_.seed(random_device);
+    generator_.seed(random_device());
 
     if(initialie_values)
     {
@@ -43,8 +51,8 @@ void Genome::mutation()
     double random_number = uniform_real_distribution_(generator_);
     if(random_number < MUTATION_PROBABILITY)
     {
-        int mutation_index = static_cast<int>((random_number*100) % 10);
-        int exchange_index = static_cast<int>((random_number*1000) % 10);
+        int mutation_index = static_cast<int>((random_number*100.0)) % 10;
+        int exchange_index = static_cast<int>((random_number*1000.0)) % 10;
         if(mutation_index >= num_values_)
         {
             mutation_index = num_values_-1;
@@ -71,7 +79,22 @@ const std::vector<double>& Genome::getValues() const
     return values_;
 }
 
-Genome operator*(const Genome& genome) const
+int Genome::getNumValues() const
+{
+    return num_values_;
+}
+
+int Genome::getAge() const
+{
+    return age_;
+}
+
+double* Genome::at(const int index)
+{
+    return &values_.at(index);
+}
+
+Genome Genome::operator*(const Genome& genome)
 {
     Genome genome_result = genome;
     for(int i=0; i<num_values_; i++)
@@ -79,30 +102,44 @@ Genome operator*(const Genome& genome) const
         bool crossover_decision = static_cast<bool>(uniform_int_distribution_(generator_));
         if(crossover_decision)
         {
-            genome_result.at(i) = values_(i);
+            values_.at(i) = genome.getValues().at(i);
         }
     }
  
     return genome_result;
 }
 
-bool operator<(const Genome& genome) const
+bool Genome::operator<(const Genome& genome) const
 {
-    fitness_ < genome.getFitness();
+    return fitness_ < genome.getFitness();
 }
 
-bool operator>(const Genome& genome) const
+bool Genome::operator>(const Genome& genome) const
 {
-    fitness_ > genome.getFitness();
+    return fitness_ > genome.getFitness();
+}
+
+
+Genome& Genome::operator=(const Genome& genome)
+{
+    if(this != &genome)
+    {
+        age_ = genome.getAge();
+        fitness_ = genome.getFitness();
+        num_values_ = genome.getNumValues();
+        values_ = genome.getValues();
+    }
+    return *this;
 }
 
 std::ostream& operator<<(std::ostream& output, const Genome genome)
 {
-    for(int i=0; i<num_values_; i++)
+    for(int i=0; i<genome.getNumValues(); i++)
     {
         output << genome.values_.at(i) << std::endl;
     }
     output << std::endl;
+    return output;
 }
 
 } // genetic_algorithm
