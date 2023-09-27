@@ -5,13 +5,13 @@ namespace genetic_algorithm
 
 GACore::GACore(const CoreSettings &core_settings): core_settings_(core_settings)
 {
-
+    std::cout << "[GACore] constructed" << std::endl;
 }
 
 void GACore::initialize(const bool initialie_values)
 {
     std::vector<Genome> genomes(core_settings_.population_size);
-    for(int i=0; i<core_settings_.population_size; )
+    for(int i=0; i<core_settings_.population_size; i++)
     {
         Genome genome(core_settings_.num_genoms_value, initialie_values);
         if(!initialie_values && initial_genoms_value_.size() == core_settings_.num_genoms_value)
@@ -31,9 +31,10 @@ void GACore::initialize(const bool initialie_values)
 
 void GACore::run()
 {
-    int iteration_num = population_.getGenerationNum();
-    for(; iteration_num<core_settings_.max_generations; 
-          population_.increaseGenerationNumber()
+    
+    for(int iteration_num = population_.getGenerationNum(); 
+        iteration_num<core_settings_.max_generations; 
+        population_.increaseGenerationNumber()
         )
     {
         for(Genome genome : population_.getPopulation())
@@ -43,10 +44,22 @@ void GACore::run()
         }
 
         population_.createNextGeneration();
+        iteration_num = population_.getGenerationNum();
     }
 
     std::cout << "[GACore] genetic algorithm terminates. The best genome has the following values:\n" 
               << population_.getBestGenome() << std::endl;
+}
+
+void GACore::initializeGenomesValues(const std::vector<double> &initial_genomes_value)
+{
+    initial_genoms_value_ = initial_genomes_value;
+}
+
+
+double GACore::evaluateCostFunction(const std::vector<double> &values)
+{
+  return 1;
 }
 
 }// genetic_algorithm
