@@ -8,7 +8,7 @@ Population::Population(): generation_num_(0)
 
 }
 
-Population::Population(std::vector<Genome> &genomes): genomes_(genomes),
+Population::Population(std::shared_ptr<Genome> &genomes): genomes_(genomes),
                                                       generation_num_(0)
 {
     std::cout << "[Population] creaed population give the set of genomes" << std::endl;
@@ -31,28 +31,37 @@ void Population::sort()
 
 void Population::createNextGeneration()
 {
+    std::cout << "[Population] create next generatoion: " << generation_num_ << std::endl;
     if(generation_num_ == 0)
     {
         sort();
     }
-    std::vector<Genome> next_genomes = genomes_;
+    std::vector<std::shared_ptr<Genome>> next_genomes = genomes_;
     int pupulation_size = static_cast<int>(genomes_.size());
     for(int i=0; i<pupulation_size/2; i++)
     {
         Genome genome_a = genomes_.at(i); 
         Genome genome_b = genomes_.at(pupulation_size -1 - i); 
-        next_genomes.at(pupulation_size/2 + i) = genome_a * genome_b;
+        Genome next_genome(genome_a * genome_b);
+        next_genome.mutation();
+        next_genomes.at(pupulation_size/2 + i) = next_genome;
     }
+    genomes_ = next_genomes;
     sort();
+    for(int i=0; i<genomes_.size(); i++)
+    {
+        std::cout << "[Population] genome fitness: " << genomes_.at(i).getFitness() << std::endl; 
+    }
+    std::cout  << std::endl; 
     generation_num_++;
 }
 
-void Population::setPopulation(const std::vector<Genome> &genomes)
+void Population::setPopulation(const std::shared_ptr<Genome> &genomes)
 {
     genomes_ = genomes;
 }
 
-const std::vector<Genome>& Population::getPopulation() const
+const std::shared_ptr<Genome>& Population::getPopulation() const
 {
     return genomes_;
 }

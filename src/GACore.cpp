@@ -10,13 +10,14 @@ GACore::GACore(const CoreSettings &core_settings): core_settings_(core_settings)
 
 void GACore::initialize(const bool initialie_values)
 {
-    std::vector<Genome> genomes(core_settings_.population_size);
+    std::vector<std::shared_ptr<Genome>> genomes(core_settings_.population_size);
     for(int i=0; i<core_settings_.population_size; i++)
     {
-        Genome genome(core_settings_.num_genoms_value, initialie_values);
+        std::shared_ptr<Genome> p_genome = std::make_shared(Genome(core_settings_.num_genoms_value, initialie_values));
         if(!initialie_values && initial_genoms_value_.size() == core_settings_.num_genoms_value)
         {
-            genome.setValues(initial_genoms_value_);
+            
+            p_genome->setValues(initial_genoms_value_);
         }
         else
         {
@@ -24,7 +25,7 @@ void GACore::initialize(const bool initialie_values)
             std::cout << "[GACore] since the genoms values have not been initialized with defauls values it is neccessary" 
                       <<           "to set the initial values" << std::endl;
         }
-        genomes.at(i) = genome;
+        genomes.at(i) = p_genome;
     }
     population_.setPopulation(genomes);
 }
@@ -38,8 +39,9 @@ void GACore::run()
         )
     {
         for(Genome genome : population_.getPopulation())
-        {
+        {   
             double fitness = evaluateCostFunction(genome.getValues());
+            std::cout << "[FACore] fitness: " << fitness << std::endl;
             genome.setFitness(fitness);
         }
 

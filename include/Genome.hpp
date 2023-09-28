@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
 
 namespace genetic_algorithm
 {
@@ -12,6 +13,7 @@ class Genome
 {
     public:
         Genome();
+        Genome(const Genome &genome);
         Genome(const int num_values, const bool initialie_values=false);
 
         void setFitness(const double fitness);

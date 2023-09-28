@@ -2,6 +2,7 @@
 #define GACORE_HPP
 
 #include <iostream>
+#include <memory>
 
 #include "utiliy_classes.hpp"
 #include "Population.hpp"
@@ -27,8 +28,7 @@ class GACore
     protected:
         std::vector<double> initial_genoms_value_;
 
-        //virtual double evaluateCostFunction(const std::vector<double> &values) = 0;
-        double evaluateCostFunction(const std::vector<double> &values);
+        virtual double evaluateCostFunction(const std::vector<double> &values) = 0;
 
 };
 
