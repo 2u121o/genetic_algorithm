@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <random>
+#include <chrono>
 
 namespace genetic_algorithm
 {
@@ -12,6 +13,7 @@ class Genome
 {
     public:
         Genome();
+        Genome(const Genome &genome);
         Genome(const int num_values, const bool initialie_values=false);
 
         void setFitness(const double fitness);
@@ -47,7 +49,7 @@ class Genome
         std::uniform_real_distribution<double> uniform_real_distribution_;
         std::mt19937 generator_;
 
-        const double MUTATION_PROBABILITY = 0.4;
+        const double MUTATION_PROBABILITY = 0.2;
 
         void initialize(const bool initialie_values);
 

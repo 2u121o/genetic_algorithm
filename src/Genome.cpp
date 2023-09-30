@@ -11,6 +11,15 @@ Genome::Genome(): age_(0),
 
 }
 
+Genome::Genome(const Genome &genome): uniform_int_distribution_(0,1),
+                                      uniform_real_distribution_(0.0,1.0)
+{
+    age_ = genome.getAge();
+    fitness_ = genome.getFitness();
+    num_values_ = genome.getNumValues();
+    values_ = genome.getValues();
+}
+
 Genome::Genome(const int num_values, const bool initialie_values): age_(0), 
                                                                    fitness_(0), 
                                                                    num_values_(num_values),
@@ -22,8 +31,6 @@ Genome::Genome(const int num_values, const bool initialie_values): age_(0),
 
 void Genome::initialize(const bool initialie_values)
 {
-    std::random_device random_device;
-    generator_.seed(random_device());
 
     if(initialie_values)
     {
@@ -48,9 +55,16 @@ double Genome::getFitness() const
 
 void Genome::mutation()
 {
+    auto current_time = std::chrono::system_clock::now();
+    auto current_time_nanoseconds = std::chrono::time_point_cast<std::chrono::nanoseconds>(current_time);
+    auto current_time_since_epoch = current_time_nanoseconds.time_since_epoch();
+    generator_.seed(current_time_since_epoch.count());
     double random_number = uniform_real_distribution_(generator_);
+    double random_number_sign_decision = uniform_real_distribution_(generator_);
+
     if(random_number < MUTATION_PROBABILITY)
     {
+
         int mutation_index = static_cast<int>((random_number*100.0)) % 10;
         int exchange_index = static_cast<int>((random_number*1000.0)) % 10;
         if(mutation_index >= num_values_)
@@ -65,7 +79,17 @@ void Genome::mutation()
         {
             exchange_index--;
         }
-        values_.at(mutation_index) = values_.at(exchange_index);
+
+        //values_.at(mutation_index) = values_.at(exchange_index);
+        if(random_number_sign_decision>0.5)
+        {
+            values_.at(mutation_index) = values_.at(mutation_index) + random_number;
+        }
+        else
+        {
+            values_.at(mutation_index) = values_.at(mutation_index) - random_number;
+        }
+        
     }
 }
 
@@ -116,6 +140,7 @@ bool Genome::operator<(const Genome& genome) const
 
 bool Genome::operator>(const Genome& genome) const
 {
+
     return fitness_ > genome.getFitness();
 }
 
@@ -136,9 +161,9 @@ std::ostream& operator<<(std::ostream& output, const Genome genome)
 {
     for(int i=0; i<genome.getNumValues(); i++)
     {
-        output << genome.values_.at(i) << std::endl;
+        output << "Value_" << i << ": " << genome.values_.at(i) << std::endl;
     }
-    output << std::endl;
+    output << "Fitness: " << genome.getFitness();
     return output;
 }
 
