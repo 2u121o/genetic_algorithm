@@ -60,10 +60,10 @@ void Genome::mutation()
     auto current_time_since_epoch = current_time_nanoseconds.time_since_epoch();
     generator_.seed(current_time_since_epoch.count());
     double random_number = uniform_real_distribution_(generator_);
-    std::cout << "[Genome] mutation random_number: " << random_number << std::endl;
+
     if(random_number < MUTATION_PROBABILITY)
     {
-        std::cout << "[Genome] mutation" << std::endl;
+
         int mutation_index = static_cast<int>((random_number*100.0)) % 10;
         int exchange_index = static_cast<int>((random_number*1000.0)) % 10;
         if(mutation_index >= num_values_)
@@ -78,8 +78,7 @@ void Genome::mutation()
         {
             exchange_index--;
         }
-        std::cout << "[Genome] mutation_index: " << mutation_index << std::endl;
-        std::cout << "[Genome] exchange_index: " << exchange_index << std::endl;
+
         //values_.at(mutation_index) = values_.at(exchange_index);
         values_.at(mutation_index) = values_.at(mutation_index) + random_number;
     }
@@ -132,8 +131,7 @@ bool Genome::operator<(const Genome& genome) const
 
 bool Genome::operator>(const Genome& genome) const
 {
-    std::cout << "[Genome] fitness: " << fitness_ << std::endl;
-    std::cout << "[Genome] genome.getFitness(): " << genome.getFitness() << std::endl;
+
     return fitness_ > genome.getFitness();
 }
 

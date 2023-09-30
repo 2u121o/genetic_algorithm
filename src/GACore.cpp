@@ -13,7 +13,7 @@ void GACore::initialize(const bool initialie_values)
     std::vector<std::shared_ptr<Genome>> genomes(core_settings_.population_size);
     for(int i=0; i<core_settings_.population_size; i++)
     {
-        std::shared_ptr<Genome> p_genome = std::make_shared(Genome(core_settings_.num_genoms_value, initialie_values));
+        std::shared_ptr<Genome> p_genome = std::make_shared<Genome>(core_settings_.num_genoms_value, initialie_values);
         if(!initialie_values && initial_genoms_value_.size() == core_settings_.num_genoms_value)
         {
             
@@ -38,11 +38,10 @@ void GACore::run()
         population_.increaseGenerationNumber()
         )
     {
-        for(Genome genome : population_.getPopulation())
+        for(std::shared_ptr<Genome> genome : population_.getPopulation())
         {   
-            double fitness = evaluateCostFunction(genome.getValues());
-            std::cout << "[FACore] fitness: " << fitness << std::endl;
-            genome.setFitness(fitness);
+            double fitness = evaluateCostFunction(genome->getValues());
+            genome->setFitness(fitness);
         }
 
         population_.createNextGeneration();
