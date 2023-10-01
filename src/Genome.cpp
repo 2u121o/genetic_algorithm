@@ -20,27 +20,29 @@ Genome::Genome(const Genome &genome): uniform_int_distribution_(0,1),
     values_ = genome.getValues();
 }
 
-Genome::Genome(const int num_values, const bool initialie_values): age_(0), 
+Genome::Genome(const int num_values, const bool initialize_values): age_(0), 
                                                                    fitness_(0), 
                                                                    num_values_(num_values),
                                                                    uniform_int_distribution_(0,1),
                                                                    uniform_real_distribution_(0.0,1.0)
 {
-    initialize(initialie_values);
+    if(initialize_values)
+    {
+        initialize();
+    }
 }
 
-void Genome::initialize(const bool initialie_values)
+void Genome::initialize()
 {
 
-    if(initialie_values)
+   
+    values_.resize(num_values_);
+    for(int i=0; i<num_values_; i++)
     {
-        values_.resize(num_values_);
-        for(int i=0; i<num_values_; i++)
-        {
-            double random_number = uniform_real_distribution_(generator_);
-            values_.at(i) = random_number * 10.0;
-        }
+        double random_number = uniform_real_distribution_(generator_);
+        values_.at(i) = random_number * 10.0;
     }
+    
 }
 
 void Genome::setFitness(const double fitness)
@@ -66,21 +68,11 @@ void Genome::mutation()
     {
 
         int mutation_index = static_cast<int>((random_number*100.0)) % 10;
-        int exchange_index = static_cast<int>((random_number*1000.0)) % 10;
         if(mutation_index >= num_values_)
         {
             mutation_index = num_values_-1;
         }
-        if(exchange_index >= num_values_)
-        {
-            exchange_index = num_values_-1;
-        }
-        else if(exchange_index == mutation_index)
-        {
-            exchange_index--;
-        }
 
-        //values_.at(mutation_index) = values_.at(exchange_index);
         if(random_number_sign_decision>0.5)
         {
             values_.at(mutation_index) = values_.at(mutation_index) + random_number;
@@ -111,11 +103,6 @@ int Genome::getNumValues() const
 int Genome::getAge() const
 {
     return age_;
-}
-
-double* Genome::at(const int index)
-{
-    return &values_.at(index);
 }
 
 Genome Genome::operator*(const Genome& genome)

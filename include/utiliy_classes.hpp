@@ -4,10 +4,20 @@
 namespace genetic_algorithm
 {
 
+/**
+ * @brief Essential setting used to execute the genetic algorithm
+ * 
+ */
 struct CoreSettings
-{
+{   
+    //! number of genomes in the population.
     int population_size;
-    int num_genoms_value;
+
+    //! number of genome values inside each genome.
+    int num_genomes_value;
+
+    //! Maximum number of generation, after this number
+    //! the algorithm stops.
     int max_generations;
 };
 

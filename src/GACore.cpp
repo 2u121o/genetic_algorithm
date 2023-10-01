@@ -8,21 +8,21 @@ GACore::GACore(const CoreSettings &core_settings): core_settings_(core_settings)
     std::cout << "[GACore] constructed" << std::endl;
 }
 
-void GACore::initialize(const bool initialie_values)
+void GACore::initialize(const bool initialize_values)
 {
     std::vector<std::shared_ptr<Genome>> genomes(core_settings_.population_size);
     for(int i=0; i<core_settings_.population_size; i++)
     {
-        std::shared_ptr<Genome> p_genome = std::make_shared<Genome>(core_settings_.num_genoms_value, initialie_values);
-        if(!initialie_values && initial_genoms_value_.size() == core_settings_.num_genoms_value)
+        std::shared_ptr<Genome> p_genome = std::make_shared<Genome>(core_settings_.num_genomes_value, initialize_values);
+        if(!initialize_values && initial_genomes_value_.size() == core_settings_.num_genomes_value)
         {
             
-            p_genome->setValues(initial_genoms_value_);
+            p_genome->setValues(initial_genomes_value_);
         }
         else
         {
             //TODO: throw an exception
-            std::cout << "[GACore] since the genoms values have not been initialized with defauls values it is neccessary" 
+            std::cout << "[GACore] since the genomes values have not been initialized with defaults values it is necessary" 
                       <<           "to set the initial values" << std::endl;
         }
         genomes.at(i) = p_genome;
@@ -54,7 +54,7 @@ void GACore::run()
 
 void GACore::initializeGenomesValues(const std::vector<double> &initial_genomes_value)
 {
-    initial_genoms_value_ = initial_genomes_value;
+    initial_genomes_value_ = initial_genomes_value;
 }
 
 

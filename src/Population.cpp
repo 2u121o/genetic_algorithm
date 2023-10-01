@@ -3,15 +3,10 @@
 namespace genetic_algorithm
 {
 
-Population::Population(): generation_num_(0)
-{
-
-}
-
 Population::Population(std::vector<std::shared_ptr<Genome>> &genomes): genomes_(genomes),
                                                       generation_num_(0)
 {
-    std::cout << "[Population] creaed population give the set of genomes" << std::endl;
+    std::cout << "[Population] created population give the set of genomes" << std::endl;
 }
 
 Population::Population(const int population_size, const int num_values): generation_num_(0)
@@ -37,22 +32,17 @@ void Population::createNextGeneration()
         sort();
     }
     std::vector<std::shared_ptr<Genome>> next_genomes = genomes_;
-    int pupulation_size = static_cast<int>(genomes_.size());
-    for(int i=0; i<pupulation_size/2; i++)
+    int population_size = static_cast<int>(genomes_.size());
+    for(int i=0; i<population_size/2; i++)
     {
         Genome genome_a = *genomes_.at(i); 
-        Genome genome_b = *genomes_.at(pupulation_size -1 - i); 
+        Genome genome_b = *genomes_.at(population_size -1 - i); 
         std::shared_ptr<Genome> p_next_genome = std::make_shared<Genome>(genome_a * genome_b);
         p_next_genome->mutation();
-        next_genomes.at(pupulation_size/2 + i) = p_next_genome;
+        next_genomes.at(population_size/2 + i) = p_next_genome;
     }
     genomes_ = next_genomes;
     sort();
-    // for(int i=0; i<genomes_.size(); i++)
-    // {
-    //     std::cout << "[Population] genome fitness: " << genomes_.at(i)->getFitness() << std::endl; 
-    // }
-    // std::cout  << std::endl; 
     generation_num_++;
 }
 
